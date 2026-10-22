@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+{% block title %}Login{% endblock %}
+{% block content %}
+<div class="auth-card">
+    <div class="auth-brand">
+        <span class="brand-icon"><i class="bi bi-wallet2"></i></span>
+        <h3>Welcome back</h3>
+        <p class="auth-sub">Log in to track your expenses</p>
+    </div>
+    {% if form.non_field_errors %}
+        <div class="toast-msg toast-danger mb-3">
+            <i class="bi bi-exclamation-circle"></i>
+            <span>{{ form.non_field_errors|join:' ' }}</span>
+        </div>
+    {% endif %}
+    <form method="post" novalidate>
+        {% csrf_token %}
+        <div class="mb-3">
+            <label class="form-label">Username</label>
+            <input type="text" name="username" class="form-control" autofocus required>
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Password</label>
+            <input type="password" name="password" class="form-control" required>
+        </div>
+        <button type="submit" class="btn btn-primary w-100 justify-content-center">
+            <i class="bi bi-box-arrow-in-right"></i> Log In
+        </button>
+    </form>
+    <p class="auth-foot">
+        New here? <a href="{% url 'signup' %}">Create an account</a>
+    </p>
+</div>
+{% endblock %}

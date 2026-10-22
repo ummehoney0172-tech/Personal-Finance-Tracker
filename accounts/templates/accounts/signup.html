@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% block title %}Sign Up{% endblock %}
+{% block content %}
+<div class="auth-card">
+    <div class="auth-brand">
+        <span class="brand-icon"><i class="bi bi-wallet2"></i></span>
+        <h3>Create your account</h3>
+        <p class="auth-sub">Start tracking expenses in under a minute</p>
+    </div>
+    <form method="post" novalidate>
+        {% csrf_token %}
+        {% for field in form %}
+            <div class="mb-3">
+                <label class="form-label">{{ field.label }}</label>
+                <input type="{{ field.field.widget.input_type }}"
+                       name="{{ field.name }}"
+                       class="form-control"
+                       value="{{ field.value|default_if_none:'' }}">
+                {% if field.help_text %}
+                    <div class="form-text mt-1">{{ field.help_text|safe }}</div>
+                {% endif %}
+                {% for error in field.errors %}
+                    <div class="text-danger small mt-1">{{ error }}</div>
+                {% endfor %}
+            </div>
+        {% endfor %}
+        <button type="submit" class="btn btn-primary w-100 justify-content-center">
+            <i class="bi bi-person-plus"></i> Create Account
+        </button>
+    </form>
+    <p class="auth-foot">
+        Already have an account? <a href="{% url 'login' %}">Log in</a>
+    </p>
+</div>
+{% endblock %}

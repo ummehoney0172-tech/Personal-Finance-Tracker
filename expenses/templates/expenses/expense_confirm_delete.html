@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% block title %}Delete Expense{% endblock %}
+{% block content %}
+<div class="page-header">
+    <div>
+        <h1 class="page-title">Delete expense?</h1>
+        <p class="page-subtitle">This action cannot be undone</p>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-7 col-xl-6">
+        <div class="card-modern p-4">
+            <div class="d-flex align-items-center gap-3 p-3 mb-3" style="background:#fef2f2;border-radius:12px;">
+                <div class="summary-icon" style="background:#fee2e2;color:#dc2626;width:44px;height:44px;flex-shrink:0;">
+                    <i class="bi bi-exclamation-triangle"></i>
+                </div>
+                <div>
+                    <strong>{{ expense.date|date:'M d, Y' }}</strong> · <span class="cat-badge cat-{{ expense.category }}">{{ expense.category }}</span>
+                    <div class="muted small">{{ expense.description }}</div>
+                </div>
+                <div class="ms-auto amount-cell">৳ {{ expense.amount }}</div>
+            </div>
+            <form method="post">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-danger"><i class="bi bi-trash"></i> Yes, delete</button>
+                <a href="{% url 'expense_list' %}" class="btn btn-outline-secondary">Cancel</a>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

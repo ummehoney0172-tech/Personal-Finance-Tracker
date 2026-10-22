@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+{% block title %}Profile{% endblock %}
+{% block content %}
+<div class="page-header">
+    <div>
+        <h1 class="page-title">Profile</h1>
+        <p class="page-subtitle">Your account details</p>
+    </div>
+</div>
+
+<div class="row g-3">
+    <div class="col-lg-5">
+        <div class="card-modern p-4 text-center">
+            <div class="avatar mx-auto mb-3" style="width:72px;height:72px;font-size:1.8rem;">{{ user.username|slice:':1'|upper }}</div>
+            <h4 class="mb-1" style="font-weight:700;letter-spacing:-0.01em;">{{ user.username }}</h4>
+            <p class="muted mb-0">{{ user.email|default:'No email set' }}</p>
+        </div>
+    </div>
+    <div class="col-lg-7">
+        <div class="card-modern p-4">
+            <h6 class="mb-3" style="font-weight:600;">Account info</h6>
+            <div class="d-flex justify-content-between py-2 border-bottom">
+                <span class="muted">Username</span><span>{{ user.username }}</span>
+            </div>
+            <div class="d-flex justify-content-between py-2 border-bottom">
+                <span class="muted">Email</span><span>{{ user.email|default:'—' }}</span>
+            </div>
+            <div class="d-flex justify-content-between py-2 border-bottom">
+                <span class="muted">Joined</span><span>{{ user.date_joined|date:'M d, Y' }}</span>
+            </div>
+            <div class="d-flex justify-content-between py-2">
+                <span class="muted">Total expenses tracked</span><span style="font-weight:600;">{{ user.expenses.count }}</span>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

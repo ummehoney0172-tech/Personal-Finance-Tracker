@@ -1,0 +1,93 @@
+{% extends 'base.html' %}
+{% block title %}Expenses{% endblock %}
+{% block content %}
+<div class="page-header">
+    <div>
+        <h1 class="page-title">Expenses</h1>
+        <p class="page-subtitle">All your tracked expenses</p>
+    </div>
+    <a href="{% url 'expense_create' %}" class="btn btn-primary">
+        <i class="bi bi-plus-lg"></i> Add Expense
+    </a>
+</div>
+
+<form method="get" class="card-modern p-3 mb-3">
+    <div class="row g-2 align-items-center">
+        <div class="col-auto">
+            <label class="form-label mb-0 muted"><i class="bi bi-funnel"></i> Filter:</label>
+        </div>
+        <div class="col-md-4">
+            <select name="category" class="form-select" onchange="this.form.submit()">
+                <option value="">All categories</option>
+                {% for value, label in categories %}
+                    <option value="{{ value }}" {% if value == selected_category %}selected{% endif %}>{{ label }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        {% if selected_category %}
+            <div class="col-auto">
+                <a href="{% url 'expense_list' %}" class="btn btn-outline-secondary btn-sm">
+                    <i class="bi bi-x-lg"></i> Clear
+                </a>
+            </div>
+        {% endif %}
+    </div>
+</form>
+
+<div class="card-modern">
+    <div class="table-responsive">
+        <table class="table-modern">
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Category</th>
+                    <th>Description</th>
+                    <th class="text-end">Amount</th>
+                    <th class="text-end">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for expense in page_obj %}
+                    <tr>
+                        <td class="muted">{{ expense.date|date:'M d, Y' }}</td>
+                        <td><span class="cat-badge cat-{{ expense.category }}">{{ expense.category }}</span></td>
+                        <td>{{ expense.description }}</td>
+                        <td class="text-end amount-cell">৳ {{ expense.amount }}</td>
+                        <td class="text-end">
+                            <a href="{% url 'expense_update' expense.pk %}" class="btn btn-outline-primary btn-sm" title="Edit">
+                                <i class="bi bi-pencil"></i>
+                            </a>
+                            <a href="{% url 'expense_delete' expense.pk %}" class="btn btn-outline-danger btn-sm" title="Delete">
+                                <i class="bi bi-trash"></i>
+                            </a>
+                        </td>
+                    </tr>
+                {% empty %}
+                    <tr><td colspan="5">
+                        <div class="empty-state">
+                            <i class="bi bi-receipt"></i>
+                            <h6>No expenses found</h6>
+                            <p class="mb-3">{% if selected_category %}Try clearing the filter or{% else %}Start by{% endif %} adding your first expense.</p>
+                            <a href="{% url 'expense_create' %}" class="btn btn-primary"><i class="bi bi-plus-lg"></i> Add expense</a>
+                        </div>
+                    </td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+{% if page_obj.has_other_pages %}
+    <nav class="mt-3">
+        <ul class="pagination justify-content-center">
+            {% if page_obj.has_previous %}
+                <li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}{% if selected_category %}&category={{ selected_category }}{% endif %}"><i class="bi bi-chevron-left"></i></a></li>
+            {% endif %}
+            <li class="page-item disabled"><span class="page-link">{{ page_obj.number }} / {{ page_obj.paginator.num_pages }}</span></li>
+            {% if page_obj.has_next %}
+                <li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}{% if selected_category %}&category={{ selected_category }}{% endif %}"><i class="bi bi-chevron-right"></i></a></li>
+            {% endif %}
+        </ul>
+    </nav>
+{% endif %}
+{% endblock %}
